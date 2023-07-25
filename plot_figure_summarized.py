@@ -1155,30 +1155,27 @@ sampledic = plot_mapping_rate(directory, sampledata)
 print("sampledic:",sampledic)
 
 # [1] plot CCAcount for all samples
-# CCAanalysis(directory,sampledic)
+CCAanalysis(directory,sampledic)
 
-# [2] countをscatter plotする
-# differential_expression(directory,sampledic,[],'log10',organism,False)
-# for mouse
-# differential_expression_mouse(directory,sampledic,'log10',organism,False)
+# [2] scatter plot of tRNA counts
+differential_expression(directory,sampledic,[],'log10',organism,False)
 
-# [4] Isodecoder毎に、modificationの判定をする
-# RTstop_mismatch(directory,folder,sampledic,organism)
+# [4] Determine modification for each isodecoder
+RTstop_mismatch(directory,folder,sampledic,organism)
 
 # [5] % Full length reads
-# full_length(directory,sample)
-# out = pd.read_csv("{}full_length_reads.csv".format(directory))
+full_length(directory,sample)
+out = pd.read_csv("{}full_length_reads.csv".format(directory))
 # print(out.head())
 
 # [6] Sum of misincorporation proportions
-# ave_mismatch(directory,sample)    
+ave_mismatch(directory,sample)    
 
 # [7] Nedialkova's paperのannotated tRNA modificartions を、自分の結果にannotateする。
-# annotation_mod(directory,sample)
+annotation_mod(directory,sample)
 
 # [8] RTstop & misincorporation pattern at modification sites
-# detectable_modifications(directory,sample,"max",False)
-# detectable_modifications(directory,sample,"ave",True)
+detectable_modifications(directory,sample,"max",False)
 
 
 # [8.5] look into m1A and m1G
@@ -1203,8 +1200,6 @@ def specific_modification(directory,sample):
                     b += 1
                     ax = fig.add_subplot(len(set(dfm["canon_pos"])),2, b)
                     sns.boxplot(x="condition",y="proportion",data=dft,ax=ax,palette=color,order=sample, flierprops=flierprops)
-                    # sns.stripplot(x="condition",y="proportion",data=dft,ax=ax,palette=color,order=sample,s=3)
-                    # plt.plot([-0.5,5.5],[0.1,0.1],linestyle="dashed",color="gray",linewidth=0.5)
                     for l in range(len(sample)-1):
                         # print(sample[l],"vs",sample[l+1])
                         signal = test(dft[dft["condition"]==sample[l]]["proportion"],dft[dft["condition"]==sample[l+1]]["proportion"],sample[l],sample[l+1])
@@ -1214,32 +1209,30 @@ def specific_modification(directory,sample):
                     ax.set_ylabel(t)
                     ax.set_title("{}{}x{},{}".format(m,p,len(set(dft["isodecoder"])),t))
                     ax.set_ylim(-0.1,1.4)
-                    # plt.ylim(-0.1,1.4)
                 plt.tight_layout()
             plt.savefig("{}figures/{}_position_dependent_RTstop-mismatch_{}.png".format(directory,m,cal))
                             
-# specific_modification(directory,sample)
+specific_modification(directory,sample)
 
 # [9] Readthrough comparison between two samples
-# compare_readthrough(directory,["K562_totalRNA","K562_tRNA_DN"])
+compare_readthrough(directory,["K562_totalRNA","K562_tRNA_DN"])
 
 # [10] heatmap of misincorporation and RTStop
-# RTstop_mismatch_for_heatmap(directory,sample,"isoacceptor")
-# RTstop_mismatch_for_heatmap(directory,sample,"isodecoder")
-# heatmap_RTsop_mismatch(directory,["K562_totalRNA"])
-# heatmap_RTsop_mismatch(directory,["mouse_mut"])
+RTstop_mismatch_for_heatmap(directory,sample,"isoacceptor")
+RTstop_mismatch_for_heatmap(directory,sample,"isodecoder")
+heatmap_RTsop_mismatch(directory,["K562_totalRNA"])
 
 # [11] Annotation of known modifications & misincorporated bases
-# annotation_mod_misincorporated_base(directory,sample)
-# plot_base_preference(directory,sample,"canon_pos")
-# plot_upstream_position_preference(directory,sample,[4,2],["m1A","m1G"])
-# plot_base_preference(directory,sample,"downstream")
+annotation_mod_misincorporated_base(directory,sample)
+plot_base_preference(directory,sample,"canon_pos")
+plot_upstream_position_preference(directory,sample,[4,2],["m1A","m1G"])
+plot_base_preference(directory,sample,"downstream")
 
 # [12] plot individual tRNA
-# RTstop_mismatch_individual_isoacceptor(directory,sample,"mito_tRNA-Leu-TAA","9","m1G")
-# RTstop_mismatch_individual_isoacceptor(directory,sample,"tRNA-Pro-TGG","37","m1G")
-# RTstop_mismatch_individual_isoacceptor(directory,sample,"tRNA-Pro-CGG","37","m1G")
-# RTstop_mismatch_individual_isoacceptor(directory,sample,"tRNA-Pro-AGG","34","I")
+RTstop_mismatch_individual_isoacceptor(directory,sample,"mito_tRNA-Leu-TAA","9","m1G")
+RTstop_mismatch_individual_isoacceptor(directory,sample,"tRNA-Pro-TGG","37","m1G")
+RTstop_mismatch_individual_isoacceptor(directory,sample,"tRNA-Pro-CGG","37","m1G")
+RTstop_mismatch_individual_isoacceptor(directory,sample,"tRNA-Pro-AGG","34","I")
 
 # [12] plot individual tRNA isodecoder
 def RTstop_mismatch_individual_isodecoder(directory,sample,tRNA,canon_pos,mod,special):
@@ -1286,7 +1279,7 @@ def RTstop_mismatch_individual_isodecoder(directory,sample,tRNA,canon_pos,mod,sp
         plt.legend(loc="lower center",bbox_to_anchor=(0.5,1.2))
     plt.tight_layout()
     fig.savefig("{}figures/RTstop_mismatch_in_{}".format(directory,tRNA))
-# RTstop_mismatch_individual_isodecoder(directory,sample,"tRNA-Arg-TCT-4","50","U",True)
+RTstop_mismatch_individual_isodecoder(directory,sample,"tRNA-Arg-TCT-4","50","U",True)
 
 
 # For calibration
