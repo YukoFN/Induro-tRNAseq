@@ -5,7 +5,7 @@ from matplotlib import ticker
 import seaborn as sns
 import colorsys
 import matplotlib.colors as mc
-from math import ceil #小数点以下を切り上げする
+from math import ceil
 import glob
 from scipy.stats import pearsonr
 from scipy import stats
@@ -64,7 +64,7 @@ def plot_mapping_rate(directory, sampledata):
     # plot
     fig = plt.figure(figsize=(5,4*len(sample)))
     sub = 0
-    # for 積み立てグラフ
+    # for bar graph
     umr = [] # uniquely mapped rates
     mmr = [] # multi-mapped rates
     ur = [] # unmapped rates
@@ -93,7 +93,7 @@ def plot_mapping_rate(directory, sampledata):
             plt.tight_layout()
     plt.savefig('{}/figures/mapping_rate_each.png'.format(directory))
 
-    # plot 積み立てグラフ
+    # plot bar graph
     fig = plt.figure(figsize=(5,0.6*len(sample)))
     left = [0 for n in ur]
     for y, c, l in zip([ur,mmr,umr],reversed(color),reversed(x)):
@@ -118,8 +118,6 @@ def CCAanalysis(directory,sampledic):
     df['isoacceptor'] = df["gene"].str.replace("mito_tRNA-".format(organism),"mito-")
     df['isoacceptor'] = df["isoacceptor"].str.replace("tRNA-".format(organism),"")
     df['isoacceptor'] = df['isoacceptor'].str.replace("/","").str.replace(r"[0-9]+","").str[:-1]
-    # for g in ["tRNA-",r"[0-9]+",r"-$",r"-/$",r"-//$"]: #$をつけると、末尾で一致するものになる。
-    #     df['isoacceptor'] = df['isoacceptor'].str.replace(g,"")
 
     print(df.head())
     # plot
@@ -155,8 +153,6 @@ def CCAanalysis(directory,sampledic):
                         c.append(c_)
                         cc_ = c_ + dfs[dfs['end']=='CC'].reset_index(drop=True).loc[0,'count']/sumg*100
                         cc.append(cc_)
-                        #cca_ = 100#dfs[dfs['end']=='CA'].reset_index(drop=True).loc[0,'count']/sumg*100
-                        #ccad.append(cca_)
                     else:
                         print("error!")
                         print(dfs)
@@ -178,13 +174,11 @@ def CCAanalysis(directory,sampledic):
             print(l,"ave.",round(sum(y_)/len(y_),2),"%")
             if sub == 1:
                 ax.set_yticklabels(genei,ha='right')
-                # ax.get_yaxis().set_tick_params(pad=45)
             else:
                 ax.set_yticklabels([])
         ax.set_xlim([0,100])
         ax.set_yticks(range(1,len(genei)+1))
         ax.set_ylim(0,len(bottom)+1)
-        #ax.set_ylabel('All human tRNA isodecoders',fontsize=10)
         ax.set_xlabel('Percentage(%)',fontsize=10)
         ax.set_xticks([0,20,40,60,80,100])
         ax.tick_params(axis='x',labelsize=10)
@@ -194,7 +188,7 @@ def CCAanalysis(directory,sampledic):
     plt.tight_layout()
     plt.savefig("{}figures/CCAanalysis_isoacceptors.png".format(directory))
 
-# [2] countをscatter plotする
+# [2] scatter plot
 def differential_expression(directory,sampledic,tRNA,log10,organism,significance):
     # tRNA: "tRNA-Xxx-XXX-X", or "tRNA-Xxx-XXX", or "mito_tRNA-Xxx-XXX"
     
@@ -244,17 +238,11 @@ def differential_expression(directory,sampledic,tRNA,log10,organism,significance
             df.replace([np.inf,-np.inf],0,inplace=True)
             print(df.head())
             print(df.columns)
-            # print("total # of detected all tRNAs in {}:".format(f1),len(df[(df['{}_ave'.format(f1)]>0)]))
-            # print("total # of detected cyto-tRNAs in {}:".format(f1),len(df[(df['{}_ave'.format(f1)]>0) & ~(df["Gene"].str.contains("mito"))]))
-            # print("total # of detected mito-tRNAs in {}:".format(f1),len(df[(df['{}_ave'.format(f1)]>0) & (df["Gene"].str.contains("mito"))]))
-            # print("total # of detected all tRNAs in {}:".format(f2),len(df[(df['{}_ave'.format(f2)]>0)]))
-            # print("total # of detected cyto-tRNAs in {}:".format(f2),len(df[(df['{}_ave'.format(f2)]>0) & ~(df["Gene"].str.contains("mito"))]))
-            # print("total # of detected mito-tRNAs in {}:".format(f2),len(df[(df['{}_ave'.format(f2)]>0) & (df["Gene"].str.contains("mito"))]))
             if file == "mito_Isodecoder":
                 print("Ser in {}".format(f1),df[df["Gene"].str.contains("Ser")]['{}_ave'.format(f1)])
                 print("Ser in {}".format(f2),df[df["Gene"].str.contains("Ser")]['{}_ave'.format(f2)])
 
-            #plot
+            # plot
             n += 1
             if len(tRNA) > 0:
                 if len(df[df['Gene'] == '{}_{}'.format(organism,tRNA[0])])>0:
@@ -272,11 +260,9 @@ def differential_expression(directory,sampledic,tRNA,log10,organism,significance
             x = df[xcol]
             y = df[ycol]
             # threshold
-            maxval = ceil(max([max(x),max(y)])/1)*1 #ceil: 小数点の切り上げ
-            #ax.plot([0,maxval],[0,maxval],linewidth=0.5,c='gray')
+            maxval = ceil(max([max(x),max(y)])/1)*1
             ax.plot([0,6],[0,6],linewidth=0.5,c='gray')
             r, p_value = pearsonr(df['{}_ave'.format(f1)],df['{}_ave'.format(f2)])
-            #ax.text(maxval-1.5,0.5,"r2 = {}".format(round(r*r,2)))
             ax.text(maxval-2,0.5,"R = {}".format(round(r,2)))
 
             if significance == True:
@@ -295,30 +281,27 @@ def differential_expression(directory,sampledic,tRNA,log10,organism,significance
             print("len(yy)",len(yy))
             print("type(xx)",type(yy))
             # print(yy)
-            ax.scatter(xx,yy,c='darkgray',alpha=alpha,edgecolor="darkgray",label="all")#c='lightgray'
+            ax.scatter(xx,yy,c='darkgray',alpha=alpha,edgecolor="darkgray",label="all")
 
             if significance == True:
                 # Up tRNAs
                 dfu = df[(df['log2FoldChange']>0) & (df['padj']<=padj)]
                 xx = dfu[xcol]
                 yy = dfu[ycol]
-                # 薄い色の組み合わせ。pink and green, up: #FF91A4, down : #83C760
-                # 濃い色の組み合わせ。pink and green, up: #FB607F, down : #66B032
-                # 濃い色の組み合わせ。pink and blue, up: #FB607F, down : #2694BF
                 
                 if ff != ff_:
-                    ax.scatter(xx,yy,label='{} up tRNAs'.format(len(dfu)),c='#FB607F',alpha=alpha)#,marker='^',edgecolor='firebrick',linewidth=0.5,c='lightgray')
+                    ax.scatter(xx,yy,label='{} up tRNAs'.format(len(dfu)),c='#FB607F',alpha=alpha)
                 else:
-                    ax.scatter(xx,yy,label='{} down tRNAs'.format(len(dfu)),c='#2694BF',alpha=alpha)#,marker='v',edgecolor='darkblue',linewidth=0.5,c='lightgray')
+                    ax.scatter(xx,yy,label='{} down tRNAs'.format(len(dfu)),c='#2694BF',alpha=alpha)
 
                 # Down tRNAs
                 dfd = df[(df['log2FoldChange']<0) & (df['padj']<=padj)]
                 xx = dfd[xcol]
                 yy = dfd[ycol]
                 if ff != ff_:
-                    ax.scatter(xx,yy,label='{} down tRNAs'.format(len(dfd)),c='#2694BF',alpha=alpha)#,marker='v',edgecolor='darkblue',linewidth=0.5,c='lightgray')
+                    ax.scatter(xx,yy,label='{} down tRNAs'.format(len(dfd)),c='#2694BF',alpha=alpha)
                 else:
-                    ax.scatter(xx,yy,label='{} up tRNAs'.format(len(dfd)),c='#FB607F',alpha=alpha)#,marker='^',edgecolor='firebrick',linewidth=0.5,c='lightgray')
+                    ax.scatter(xx,yy,label='{} up tRNAs'.format(len(dfd)),c='#FB607F',alpha=alpha)
 
             # specific tRNA
             if len(tRNA) > 0:
@@ -442,17 +425,11 @@ def differential_expression_mouse(directory,sampledic,log10,organism,significanc
         plt.tight_layout()
         plt.savefig('{}figures/differential_expression_{}.png'.format(directory,file))
 
-# [4] Isodecoder毎に、modificationの判定をする
-# 各isodecoderごとに、各位置のRTstopとmismatchのproportionをまとめた表
-def RTstop_mismatch(directory,folder,sampledic,organism):#10%のthreshold判定をなくしてみた
+# [4] Determine modifications for each isodecoder
+# A table of RTstop & mismatch proportion at each tRNA position
+def RTstop_mismatch(directory,folder,sampledic,organism):
     sample = sorted(set(sampledic['sample']))
     print("sample:",sample)
-    
-    #output files
-    # ol = ['{}'.format(n) for n in range(20)]
-    # ol.extend(['20','20.3','20.6'])
-    # ol.extend(['{}'.format(n) for n in range(21,76)])
-    # out = pd.DataFrame()
 
     ind = -1
     for s in sample:
@@ -577,7 +554,6 @@ def full_length(directory,sample):
     # plot
     sns.set()
     sns.set_style("ticks")
-    # color = ["#d0dfed","#7fabdb","#2376c8","#d9c0d3","#d97aa6","#d3095f"]
     color = ["#D6FA8C","#A5D721","#82B300","#FDB777","#FD9346","#FF6200"]
     fig = plt.figure(figsize=(4,3*0.6*len(sample)))
     a = 0
@@ -589,7 +565,6 @@ def full_length(directory,sample):
         else:
             data = out[out["cyto_mito"]==cm].reset_index(drop=True)
         flierprops = dict(marker='o', markersize=1, alpha=0.5)
-        # sns.boxplot(x="condition",y="full_length(%)",data=data,ax=ax,palette=color,order=sample,flierprops=flierprops)
         sns.violinplot(x="condition",y="full_length(%)",data=data,ax=ax,palette=color,order=sample,flierprops=flierprops)
         for l in range(len(sample)-1):
             # print(sample[l],"vs",sample[l+1])
@@ -622,7 +597,6 @@ def ave_mismatch(directory,sample):
                 dfr = dfi[dfi["replicate_num"]==r].reset_index(drop=True)
                 # print("len:",len(dfr))
                 # print(dfr.head())
-                # out.loc[o,"isodecoder"] = i
                 out.loc[o,"cyto_mito"] = dfr.loc[0,"cyto_mito"]
                 out.loc[o,"condition"] = s
                 out.loc[o,"ave_mismatch"] = sum(dfr["proportion"])/len(dfr)
@@ -634,7 +608,6 @@ def ave_mismatch(directory,sample):
     # plot
     sns.set()
     sns.set_style("ticks")
-    # color = ["#d0dfed","#7fabdb","#2376c8","#d9c0d3","#d97aa6","#d3095f"]
     color = ["#D6FA8C","#A5D721","#82B300","#FDB777","#FD9346","#FF6200"]
     fig = plt.figure(figsize=(4,3*0.6*len(sample)))
     a = 0
@@ -659,7 +632,7 @@ def ave_mismatch(directory,sample):
         plt.tight_layout()
     plt.savefig("{}figures/ave_misincorporation_version2.png".format(directory))
 
-# [7] Nedialkova's paperのannotated tRNA modificartions を、自分の結果にannotateする。
+# [7] Annotate tRNA modificartions on Nedialkova's paper
 def annotation_mod(directory,sample):
     # mod info
     dfm = pd.read_csv("/Volumes/YMH_tRNAseq/modContext_updated.csv")
@@ -667,14 +640,12 @@ def annotation_mod(directory,sample):
     dfp = dfm["canon_pos"].astype(str).str.split(".",expand=True).rename(columns={0:"canon_pos"})
     dfm["canon_pos"] = dfp["canon_pos"]
     modifications = ["I","Y","acp3U","m1A","m1G","m1I","m2,2G","m3C","ms2i6A/ms2t6A"]
-    # dfm = dfm[dfm["Annotated modification"].isin(modifications)].reset_index(drop=True)
     print("modifications:",set(dfm["Annotated modification"]))
     print(set(dfm["canon_pos"]))
     print(dfm.head())
     for s in sample:
         print("sample;",s)
         df = pd.read_csv("{}RTstop_mismatch_summarized_{}.csv".format(directory,s))
-        # df["canon_pos"] = df["canon_pos"].str.replace("20a","20.3").str.replace("20b","20.6")
         df = df[(df["prop_type"]=="mismatch") | (df["prop_type"]=="RTstop_eachpos")].reset_index(drop=True)
         # print(set(df["canon_pos"]))
         # print(df.head())
@@ -704,8 +675,7 @@ def detectable_modifications(directory,sample,cal,plot2):
             sns.set()
             sns.set_style("ticks")
             fig = plt.figure(figsize=(2.5*len(sample),4*len(modifications)))
-            # color = ["#00b5a1","#ff416d"]
-            color = ["#3CA2C8","#DB4C77"]#,"#F9FFF8","lightgray"] #label = ['mismatch_here',"RTstop_here",'Other','RTstop_before']
+            color = ["#3CA2C8","#DB4C77"]
             a = 0
             out = pd.DataFrame()
             o = -1
@@ -735,11 +705,6 @@ def detectable_modifications(directory,sample,cal,plot2):
                             modlist_.extend(modlist)
                             for n in range(-1,2):
                                 df.loc[i+n,"mod_pos"] = n
-                                # if len(modlist) > 0:
-                                #     for ml in modlist:
-                                        # if ml not in modifications:
-                                        #     print(modlist)
-                            # print(mod,iso,pos)
                             # for "out"
                             modlist1 = list(set(df.loc[i-1:i+1,"Annotated modification"]))
                             modlist1.remove("0")
@@ -773,7 +738,6 @@ def detectable_modifications(directory,sample,cal,plot2):
                         data = df[(df["mod_pos"] != "a")]
                         ax = fig.add_subplot(len(modifications),len(sample), a)
                         if len(data) > 0:
-                            # sns.boxplot(x="mod_pos",y="proportion",data=data,ax=ax,hue="prop_type",palette=color)
                             data1 = data[data["prop_type"] == "RTstop_eachpos"]
                             flierprops = dict(marker='o', markersize=1, alpha=0.5)
                             sns.boxplot(x="mod_pos",y="proportion",data=data1,ax=ax,color=color[1],flierprops=flierprops)
@@ -796,7 +760,6 @@ def detectable_modifications(directory,sample,cal,plot2):
         print(out.head())
         for near in ["all","near"]:
             fig2 = plt.figure(figsize=(8,3*len(modifications)))
-            # color2 = ["#d0dfed","#7fabdb","#2376c8","#d9c0d3","#d97aa6","#d3095f"]
             color2 = ["#D6FA8C","#A5D721","#82B300","#FDB777","#FD9346","#FF6200"]
             b = 0
             for m in modifications:
@@ -818,7 +781,6 @@ def detectable_modifications(directory,sample,cal,plot2):
                             ax2 = fig2.add_subplot(len(modifications),2, b)
                             flierprops = dict(marker='o', markersize=1, alpha=0.5)
                             sns.boxplot(x="condition",y="proportion",data=data3,ax=ax2,palette=color2,order=sample, flierprops=flierprops)
-                            # sns.stripplot(x="condition",y="proportion",data=data3,ax=ax2,palette=color2,order=sample,s=3)
                             for l in range(len(sample)-1):
                                 # print(sample[l],"vs",sample[l+1])
                                 signal = test(data3[data3["condition"]==sample[l]]["proportion"],data3[data3["condition"]==sample[l+1]]["proportion"],sample[l],sample[l+1])
@@ -827,14 +789,6 @@ def detectable_modifications(directory,sample,cal,plot2):
                                     plt.plot([l+0.1,l+0.9],[round(max(data3["proportion"]),1)+0.1,round(max(data3["proportion"]),1)+0.1],c="black")
                             ax2.set_title("{} at {}".format(pt,m))
                             plt.ylim(-0.1,1.4)
-                            # ax2.get_legend().remove()
-                            # if pt == "mismatch":
-                            #     plt.ylim(-0.1,1.4)
-                            # else:
-                            #     if max(data3["proportion"]) < 1:
-                            #         plt.ylim(-0.1,1.1)
-                            #     else:
-                            #         plt.ylim(-0.1,round(max(data3["proportion"]),1)+0.5)
             plt.tight_layout()
             plt.savefig("{}figures/Detectable_modifications_all_conditions_{}_mods_{}_version2.png".format(directory,near,cal))
 
@@ -848,7 +802,7 @@ def compare_readthrough(directory,sample):
         print(out.head())
         for near in ["all","near"]:
             fig2 = plt.figure(figsize=(6,10))
-            color = ["#B564E3","#D4D4D4"]#["#f7feae","#00718b"]
+            color = ["#B564E3","#D4D4D4"]
             b = 0
             if near == "near":
                 data2 = out[out["near_mod"]=="0"]
@@ -873,7 +827,6 @@ def compare_readthrough(directory,sample):
                         plt.text(l+0.5,round(max(data3["proportion"]),1)+0.1,signal,ha="center",fontsize=12)
                         plt.plot([l+0.1,l+0.9],[round(max(data3[y]),1)+0.1,round(max(data3[y]),1)+0.1],c="black")
                     ax2.set_title(pt,fontsize=10)
-                    # ax2.get_legend().remove()
                     plt.legend(loc="lower center",bbox_to_anchor=(0.5,1.2))
                     if pt == "mismatch":
                         plt.ylim(-0.1,1.1)
@@ -894,14 +847,12 @@ def compare_readthrough(directory,sample):
                     d += 1
                     data3 = data2[(data2["proportion"] > 0.1) & (data2["condition"]==s) & (data2["Annotated modification"]==m)].loc[:,["isodecoder","canon_pos","Annotated modification"]]
                     # print(data3.head())
-                    # 重複を除いた行のカウント
                     print((~data3.duplicated()).sum(),"modifications")
                     data.loc[d,"condition"] = s
                     data.loc[d,"Annotated modification"] = m
                     data.loc[d,"num_detected_mod"] = (~data3.duplicated()).sum()
             # print(data.head())
             fig = plt.figure(figsize=(6,3))
-            # color = ["#f7feae","#00718b"]
             ax = fig.add_subplot(111)
             sns.barplot(x="Annotated modification",y="num_detected_mod",data=data,ax=ax,palette=color,hue="condition",order=modifications,linewidth=1,edgecolor="black")
             for m, x in zip(modifications,range(0,len(modifications))):
@@ -956,7 +907,7 @@ def heatmap_RTsop_mismatch(directory,sample):
         n = 0
         for proptype in ["mismatch","RTstop_eachpos"]:
             out = pd.read_csv("{}heatmap_{}_{}.csv".format(directory,proptype,s),index_col=0)
-            out_mask = (out == -1) # proportion == -1部分だけ抽出 -> 別にプロット
+            out_mask = (out == -1)
             iso_ = list(out.index)
             n += 1
             ax = fig.add_subplot(2,1,n)
@@ -969,8 +920,6 @@ def heatmap_RTsop_mismatch(directory,sample):
             ax.set_xlabel("Position")
             ax.set_ylabel("tRNA isoacceptors")
             ax.set_title("{} in {}".format(proptype,s))
-            #ax.set_xticks(list(range(len(pos))))
-            #ax.set_xticklabels(pos)
             ax.set_xticks([i+0.5 for i in range(len(out.columns))])
             ax.set_xticklabels(list(out.columns))
             ax.set_yticks([i+0.5 for i in range(len(iso_))])
@@ -984,7 +933,7 @@ def heatmap_RTsop_mismatch(directory,sample):
 def annotation_mod_misincorporated_base(directory,sample):
     # mod info
     dfm = pd.read_csv("/Volumes/YMH_tRNAseq/modContext_updated.csv")
-    dfm["canon_pos"] = dfm["canon_pos"].astype(str).str.replace("20.3","20a").str.replace("20.6","20b")#.str.split(".")[0]
+    dfm["canon_pos"] = dfm["canon_pos"].astype(str).str.replace("20.3","20a").str.replace("20.6","20b")
     dfp = dfm["canon_pos"].astype(str).str.split(".",expand=True).rename(columns={0:"canon_pos"})
     dfm["canon_pos"] = dfp["canon_pos"]
     modifications = ["I","Y","acp3U","m1A","m1G","m1I","m2,2G","m3C","ms2i6A/ms2t6A"]
@@ -1115,7 +1064,6 @@ def plot_upstream_position_preference(directory,sample,samplenum,modifications):
                             plt.plot([i+0.1,i+0.9],[1.05,1.05],c="black")
                     ax.set_title(f"{mod}{pos}, x{len(dfu)/4/snum}")
                     ax.set_ylabel(f"Upstream {up}")
-                    # ax.get_legend().remove()
             plt.tight_layout()
             plt.savefig("{}figures/{}_upstream_preference_{}.png".format(directory,mod,s))
 
@@ -1159,24 +1107,22 @@ def RTstop_mismatch_individual_isoacceptor(directory,sample,tRNA,canon_pos,mod):
     plt.tight_layout()
     fig.savefig("{}figures/RTstop_mismatch_in_{}".format(directory,tRNA))
 
-# 有意差検定
+# statistic analysis
 def test(a,b,a_,b_):
     # print(a_,"vs",b_)
-    A_var = np.var(a, ddof=1)  # Aの不偏分散
-    B_var = np.var(b, ddof=1)  # Bの不偏分散
-    A_df = len(a) - 1  # Aの自由度
-    B_df = len(b) - 1  # Bの自由度
+    A_var = np.var(a, ddof=1)
+    B_var = np.var(b, ddof=1)
+    A_df = len(a) - 1
+    B_df = len(b) - 1
     if B_var == 0:
         return "error"
     else:
-        f = A_var / B_var  # F比の値
-        one_sided_pval1 = stats.f.cdf(f, A_df, B_df)  # 片側検定のp値 1
-        one_sided_pval2 = stats.f.sf(f, A_df, B_df)   # 片側検定のp値 2
-        two_sided_pval = min(one_sided_pval1, one_sided_pval2) * 2  # 両側検定のp値
-        # print('F:       ', round(f, 3))
-        # print('p-value: ', round(two_sided_pval, 3)) #p<0.05なら、不等分散 -> Welchのt検定
+        f = A_var / B_var
+        one_sided_pval1 = stats.f.cdf(f, A_df, B_df)
+        one_sided_pval2 = stats.f.sf(f, A_df, B_df)
+        two_sided_pval = min(one_sided_pval1, one_sided_pval2) * 2
         signal = ""
-        # Welchのt-test
+        # Welch's t-test
         if round(two_sided_pval, 3) < 0.05:
             t, pval = stats.ttest_ind(a,b,equal_var=False)
             if pval < 0.01:
@@ -1196,30 +1142,13 @@ def test(a,b,a_,b_):
         return signal
 
 
-# 3rd run
 # HEK293T vs K562 including Nedialkova's data
 
-# directory = '/Volumes/YMH_tRNAseq/3rd_tRNA-seq/3rd_HEK293T_vs_K562_020223/'
+# directory = ''
 # sampledata = 'sample_data_HEK293T-K562.txt'
 # organism = 'Homo_sapiens'
 # sample = ["HEK293T_totalRNA","HEK293T_tRNA","HEK293T_tRNA_DN","K562_totalRNA","K562_tRNA","K562_tRNA_DN"]
 # sample = ["K562_totalRNA","K562_tRNA_DN"]
-
-# directory = "/Volumes/YMH_tRNAseq/4th_tRNA-seq/Induro/"
-# sampledata = "sample_data_Induro_for_analysis.txt"
-# organism = 'Homo_sapiens'
-# sample = ["Induro_42C_1h","Induro_42C_2h","Induro_42C_16h","Induro_55C_1h","Induro_55C_2h","Induro_55C_16h"]
-
-# directory = '/Volumes/YMH_tRNAseq/3rd_tRNA-seq/3rd_mouse_wt_vs_mut/'
-# sampledata = 'sample_data_mouse.txt'
-# organism = 'Mus_musculus'
-# sample = ["mouse_WT","mouse_mut"]
-
-directory = "/Volumes/YMH_tRNAseq/5th_tRNA-seq/Calibration/"
-sampledata = "sample_data_calibration.txt"
-organism = "Homo_sapiens"
-folder = "Calibration/"
-sample = ["G100_m1G0","G75_m1G25","G25_m1G75","G0_m1G100"]
 
 # [0] plot mapping rates for all samples
 sampledic = plot_mapping_rate(directory, sampledata)
@@ -1312,7 +1241,6 @@ def specific_modification(directory,sample):
 # RTstop_mismatch_individual_isoacceptor(directory,sample,"tRNA-Pro-CGG","37","m1G")
 # RTstop_mismatch_individual_isoacceptor(directory,sample,"tRNA-Pro-AGG","34","I")
 
-# これは、使っているheatmap用のデータがisoacceptor毎にまとまってしまっているから、isodecoder用には別の関数を準備する必要がある。
 # [12] plot individual tRNA isodecoder
 def RTstop_mismatch_individual_isodecoder(directory,sample,tRNA,canon_pos,mod,special):
     fig = plt.figure(figsize=(5,2.7*len(sample)))
@@ -1350,8 +1278,6 @@ def RTstop_mismatch_individual_isodecoder(directory,sample,tRNA,canon_pos,mod,sp
         plt.text(len(df_)-5,0.12,"0.1",color="gray",fontsize=8)
         ax.set_ylim(0,1.2)
         ax.set_xlim(0,len(df_))
-        # ax.set_xticks([9,36,39,69,77])
-        # ax.set_xticklabels(["9","34","37","50","58"])
         ax.set_xticks([9,28,34,69,77])
         ax.set_xticklabels(["9","26","32","50","58"])
         ax.set_xlabel("Canonical position",fontsize=10)
@@ -1392,7 +1318,6 @@ def calibration(directory,sample,calib):
     xseq = np.linspace(0, 1, num=100)
     # Plot regression line
     ax.plot(xseq, a + b * xseq, color="k", lw=1)
-    # ax.plot([0,6],[0,6],linewidth=0.5,c='gray')
     r, p_value = pearsonr(x,y)
     ax.text(0.1,0.8,"R = {}".format(round(r,2)))
     ax.set_ylim(-0.1,1.1)
