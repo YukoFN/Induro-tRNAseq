@@ -29,12 +29,10 @@ def plot_mapping_rate(directory, sampledata):
     # sample data
     df = pd.read_csv('{}{}'.format(directory,sampledata),sep="\t",header=None,names=['file','sample'])
     # print(df.head())
-    # df['file_unpaired_uniq'] = [0 for i in df.index]
     for i in df[df['file'].str.contains('.fastq.gz')].index:
         df.loc[i,'file_unpaired_uniq'] = df.loc[i,'file'][:-9]+'.unpaired_uniq'
     for i in df[df['file'].str.contains('.fq.gz')].index:
         df.loc[i,'file_unpaired_uniq'] = df.loc[i,'file']+'.unpaired_uniq'
-    # print(df[df['file_unpaired_uniq']==0])
 
     with open('{}align/mapping_stats.txt'.format(directory)) as f:
         n = False
