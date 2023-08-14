@@ -1,0 +1,12 @@
+G100%_m1G0%_1.fq.gz	G100_m1G0
+G75%_m1G25%_1.fq.gz	G75_m1G25
+G25%_m1G75%_1.fq.gz	G25_m1G75
+G0%_m1G100%_1.fq.gz	G0_m1G100
+G100%_m1G0%_2.fq.gz	G100_m1G0
+G75%_m1G25%_2.fq.gz	G75_m1G25
+G25%_m1G75%_2.fq.gz	G25_m1G75
+G0%_m1G100%_2.fq.gz	G0_m1G100
+G100%_m1G0%_3.fq.gz	G100_m1G0
+G75%_m1G25%_3.fq.gz	G75_m1G25
+G25%_m1G75%_3.fq.gz	G25_m1G75
+G0%_m1G100%_3.fq.gz	G0_m1G100

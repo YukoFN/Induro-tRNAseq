@@ -1,0 +1,14 @@
+HEK293T_totalRNA_1.fq.gz	HEK293T_totalRNA
+HEK293T_totalRNA_2.fq.gz	HEK293T_totalRNA
+HEK293T_tRNA_1.fq.gz	HEK293T_tRNA
+HEK293T_tRNA_2.fq.gz	HEK293T_tRNA
+K562_totalRNA_1.fq.gz	K562_totalRNA
+K562_totalRNA_2.fq.gz	K562_totalRNA
+K562_tRNA_1.fq.gz	K562_tRNA
+K562_tRNA_2.fq.gz	K562_tRNA
+K562_totalRNA_3.fq.gz	K562_totalRNA
+K562_totalRNA_4.fq.gz	K562_totalRNA
+mimseq_hek_1.fastq.gz	HEK293T_tRNA_DN
+mimseq_hek_2.fastq.gz	HEK293T_tRNA_DN
+mimseq_k562_1.fastq.gz	K562_tRNA_DN
+mimseq_k562_2.fastq.gz	K562_tRNA_DN

@@ -1,0 +1,12 @@
+K562_totalRNA_42C_1h_1.fq.gz	Induro_42C_1h
+K562_totalRNA_42C_1h_2.fq.gz	Induro_42C_1h
+K562_totalRNA_55C_1h_1.fq.gz	Induro_55C_1h
+K562_totalRNA_55C_1h_2.fq.gz	Induro_55C_1h
+K562_totalRNA_42C_2h_1.fq.gz	Induro_42C_2h
+K562_totalRNA_42C_2h_2.fq.gz	Induro_42C_2h
+K562_totalRNA_55C_2h_1.fq.gz	Induro_55C_2h
+K562_totalRNA_55C_2h_2.fq.gz	Induro_55C_2h
+K562_totalRNA_42C_16h_1.fq.gz	Induro_42C_16h
+K562_totalRNA_42C_16h_2.fq.gz	Induro_42C_16h
+K562_totalRNA_55C_16h_1.fq.gz	Induro_55C_16h
+K562_totalRNA_55C_16h_2.fq.gz	Induro_55C_16h
