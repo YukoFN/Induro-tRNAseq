@@ -15,7 +15,7 @@ from scipy import stats
 #####################################################################################
 
 # Induro-tRNAseq vs mim-tRNAseq
-directory = '/Volumes/YMH_tRNAseq/3rd_tRNA-seq/3rd_HEK293T_vs_K562_020223/'
+directory = ''
 sampledata = 'sample_data_HEK293T-K562.txt'
 organism = 'Homo_sapiens'
 sample2 = ["K562_totalRNA","K562_tRNA_DN"]
