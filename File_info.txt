@@ -1,0 +1,33 @@
+> Sample data tab-separated text file used for running mimseq
+	# For the analysis of human data
+	- sample_data_HEK293T-K562.txt
+	# For the analysis of mouse data
+	- sample_data_mouse.txt
+	# For the analysis of Induro time course using human data
+	- sample_data_Induro.txt
+	# For the analysis of human mt-tRNALeu(TAA) transcript
+	- sample_data_calibration.txt
+
+
+
+> Codes for the analysis of output
+	# For the analysis of human data
+	- plot_figure_human.py
+		# Functions for organizing outputs from mimseq
+		a. Summary table of RTstop, misincorporation, & readthrough proportions at individual position for each isoacceptor
+		b. Summary table for heatmap of misincorporation and RTStop
+		c. Add info of annotated tRNA modificartions in Nedialkova's paper
+		d. Summary table of RTstop & misincorporation proportions at modification sites
+		e. Proportion of read identity (A,T,G,C) at annotated modifications with upstream and downstream base info
+
+
+		# Functions for figures
+		0. Mapping rate
+		1. 3'-CCA end analysis
+		2. Differential abundance analysis
+		3. Heatmap of misincorporation & RTstop
+		4. Comparison of readthrough proportion at annotated modification sites between two samples
+		5. Context-dependency of read identity
+		6. RTstop and misincorporation in individual tRNA isoacceptor
+		7. Read identity at specific site (ex. position 37 in tRNAPro(AGG))
+
