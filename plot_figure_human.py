@@ -88,7 +88,6 @@ def plot_mapping_rate(directory, sampledata):
             rn += 1
             df.loc[ss,"replicate_num"] = rn
             y = [df.loc[ss,"{}_reads".format(col)] for col in ['Uniquely_mapped','Multi-mapped','Unmapped']]
-            # print("sample:",s,"bam:",df.loc[ss,"file"])
             sub += 1
             ax = fig.add_subplot(len(df),1,sub)
             ax.barh([0,1,2],y,tick_label=x,color=color,edgecolor="black")
@@ -126,8 +125,6 @@ def CCAanalysis(directory,sampledic):
     df['isoacceptor'] = df["gene"].str.replace("mito_tRNA-".format(organism),"mito-")
     df['isoacceptor'] = df["isoacceptor"].str.replace("tRNA-".format(organism),"")
     df['isoacceptor'] = df['isoacceptor'].str.replace("/","").str.replace(r"[0-9]+","").str[:-1]
-    # for g in ["tRNA-",r"[0-9]+",r"-$",r"-/$",r"-//$"]: #$をつけると、末尾で一致するものになる。
-    #     df['isoacceptor'] = df['isoacceptor'].str.replace(g,"")
 
     print(df.head())
     # plot
@@ -163,8 +160,6 @@ def CCAanalysis(directory,sampledic):
                         c.append(c_)
                         cc_ = c_ + dfs[dfs['end']=='CC'].reset_index(drop=True).loc[0,'count']/sumg*100
                         cc.append(cc_)
-                        #cca_ = 100#dfs[dfs['end']=='CA'].reset_index(drop=True).loc[0,'count']/sumg*100
-                        #ccad.append(cca_)
                     else:
                         print("error!")
                         print(dfs)
@@ -186,13 +181,11 @@ def CCAanalysis(directory,sampledic):
             print(l,"ave.",round(sum(y_)/len(y_),2),"%")
             if sub == 1:
                 ax.set_yticklabels(genei,ha='right')
-                # ax.get_yaxis().set_tick_params(pad=45)
             else:
                 ax.set_yticklabels([])
         ax.set_xlim([0,100])
         ax.set_yticks(range(1,len(genei)+1))
         ax.set_ylim(0,len(bottom)+1)
-        #ax.set_ylabel('All human tRNA isodecoders',fontsize=10)
         ax.set_xlabel('Percentage(%)',fontsize=10)
         ax.set_xticks([0,20,40,60,80,100])
         ax.tick_params(axis='x',labelsize=10)
