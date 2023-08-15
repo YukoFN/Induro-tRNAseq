@@ -1,17 +1,21 @@
 > Sample data tab-separated text file used for running mimseq
 	# For the analysis of human data
 	- sample_data_HEK293T-K562.txt
+
 	# For the analysis of mouse data
 	- sample_data_mouse.txt
+
 	# For the analysis of Induro time course using human data
 	- sample_data_Induro.txt
+
 	# For the analysis of human mt-tRNALeu(TAA) transcript
 	- sample_data_calibration.txt
 
 
 
+
 > Codes for the analysis of output
-	# For the analysis of human data
+	# For the analysis of human data [Fig.3,4,7,S1,S3,S4]
 	- plot_figure_human.py
 		# Functions for organizing outputs from mimseq
 		a. Summary table of RTstop, misincorporation, & readthrough proportions at individual position for each isoacceptor
@@ -22,12 +26,51 @@
 
 
 		# Functions for figures
-		0. Mapping rate
-		1. 3'-CCA end analysis
-		2. Differential abundance analysis
+		0. [Cumulative bar graph] Mapping rate
+		1. [Cumulative bar graph] 3'-CCA end analysis
+		2. [Scatter plot] Differential abundance analysis
 		3. Heatmap of misincorporation & RTstop
-		4. Comparison of readthrough proportion at annotated modification sites between two samples
-		5. Context-dependency of read identity
+		4. [Boxplot] Comparison of readthrough proportion at annotated modification sites between two samples
+		5. [Boxplot] Context-dependency of read identity
 		6. RTstop and misincorporation in individual tRNA isoacceptor
-		7. Read identity at specific site (ex. position 37 in tRNAPro(AGG))
+		7. [Bar graph] Read identity at specific site (ex. position 37 in tRNAPro(AGG))
+
+	# For the analysis of mouse data [Fig.5]
+	- plot_figure_mouse.py
+		# Functions for organizing outputs from mimseq
+		a. Summary table of RTstop, misincorporation, & readthrough proportions at individual position for each isoacceptor
+			# Misincorporation proportion at position 50 in tRNA-Arg-TCT-4 is subtracted from 1 because the reference base of WT is that of mutant.
+		b. Summary table for heatmap of misincorporation and RTStop
+
+
+		# Functions for figures
+		0. [Cumulative bar graph] Mapping rate
+		1. [Cumulative bar graph] 3'-CCA end analysis
+		2. [Scatter plot] Differential abundance analysis
+		3. Heatmap of misincorporation & RTstop
+		4. RTstop and misincorporation in individual tRNA isodecoder
+		5. RTstop and misincorporation in all tRNA isodecoders
+
+
+	# For the analysis of Induro time course using human data
+	- plot_figure_Induro.py
+		# Functions for organizing outputs from mimseq
+		a. Summary table of RTstop, misincorporation, & readthrough proportions at individual position for each isoacceptor
+		b. Add info of annotated tRNA modificartions in Nedialkova's paper
+
+		# Functions for figures
+		0. [Cumulative bar graph] Mapping rate
+		1. [Cumulative bar graph] 3'-CCA end analysis
+		2. [Boxplot] ercentage of full length reads for each isodecoder
+		3. [Boxplot] Percentage of misincorporation proportion for each isodecoder
+		4. [Boxplot] RTstop & misincorporation pattern at modification sites
+
+	# For the analysis of human mt-tRNALeu(TAA) transcript
+	- plot_figure_calibration.py
+		# Functions for organizing outputs from mimseq
+		a. Summary table of RTstop, misincorporation, & readthrough proportions at individual position for each isoacceptor
+
+		# Functions for figures
+		0. [Cumulative bar graph] Mapping rate
+		1. [Scatter plot] Misincorporation proportion as a function of the G9:m1G9 ratio of the transcript of human mt-Leu(TAA)
 
