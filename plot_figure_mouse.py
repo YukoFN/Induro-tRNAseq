@@ -19,7 +19,7 @@ from scipy import stats
 #####################################################################################
 
 # Induro-tRNAseq vs mim-tRNAseq
-directory = '/Volumes/YMH_tRNAseq/3rd_tRNA-seq/3rd_mouse_wt_vs_mut/'
+directory = ''
 sampledata = 'sample_data_mouse.txt'
 organism = 'Mus_musculus'
 
