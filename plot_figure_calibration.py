@@ -15,7 +15,7 @@ from scipy import stats
 #####################################################################################
 
 # Induro-tRNAseq vs mim-tRNAseq
-directory = "/Volumes/YMH_tRNAseq/5th_tRNA-seq/Calibration/"
+directory = ""
 sampledata = "sample_data_calibration.txt"
 organism = "Homo_sapiens"
 folder = directory.split("/")[-2]
