@@ -15,8 +15,8 @@ from scipy import stats
 #####################################################################################
 
 # Induro-tRNAseq vs mim-tRNAseq
-directory = "/Volumes/YMH_tRNAseq/4th_tRNA-seq/Induro/"
-sampledata = "sample_data_Induro_for_analysis.txt"
+directory = ""
+sampledata = "sample_data_Induro.txt"
 organism = 'Homo_sapiens'
 sample = ["Induro_42C_1h","Induro_42C_2h","Induro_42C_16h","Induro_55C_1h","Induro_55C_2h","Induro_55C_16h"]
 folder = directory.split("/")[-2]
