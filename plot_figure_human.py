@@ -411,6 +411,7 @@ def heatmap_RTsop_mismatch(directory,sample):
             ax.set_xticklabels(list(out.columns))
             ax.set_yticks([i+0.5 for i in range(len(iso_))])
             ax.set_yticklabels(iso_)
+            ax.spines[:].set_visible(True)
             plt.xticks(fontsize=10,rotation=90)
             plt.yticks(fontsize=10)
         plt.tight_layout()
